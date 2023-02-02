@@ -24,6 +24,20 @@ jobs:
         uses: microsoft/setup-msbuild@v1
       - name: Look Around
         run: ls
+      - name: up one level
+        run: cd ../
+      - name: Look Around
+        run: ls
+      - name: up one level
+        run: cd ../
+      - name: Look Around
+        run: ls
+      - name: up one level
+        run: cd ../
+      - name: Look Around
+        run: ls
+      - name: up one level
+        run: cd ../
       - name: Build Version1
         run: |
           msbuild.exe -version
