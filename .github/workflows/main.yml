@@ -22,6 +22,12 @@ jobs:
           lfs: true
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
+      - name: Look Around
+        run: ls
+      - name: Build Version1
+        run: |
+          msbuild.exe -version
+
       #   with:
       #     path: Library
       #     key: Library-${{ matrix.targetPlatform }}
