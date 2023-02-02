@@ -4,8 +4,42 @@ on:
   workflow_dispatch:
 
 jobs:
+  buildForWSAPlayer:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2020.3.24f1
+        targetPlatform:
+          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - WSAPlayer # Build a UWP App.
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
   msbuild:
-    name: Build for HoloLens
+    needs: buildForWSAPlayer
+    name: MSBuild
     runs-on: windows-2019
     strategy:
       fail-fast: false
@@ -22,25 +56,25 @@ jobs:
           lfs: true
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
-      - name: Look Around
-        run: ls
-      - name: up one level
-        run: cd ../
-      - name: Look Around
-        run: ls
-      - name: up one level
-        run: cd ../
-      - name: Look Around
-        run: ls
-      - name: up one level
-        run: cd ../
-      - name: Look Around
-        run: ls
-      - name: up one level
-        run: cd ../
-      - name: Build Version1
+      - name: Build Version
         run: |
           msbuild.exe -version
+      - name: Look Around
+        run: ls
+      - name: build folder
+        run: cd build
+      - name: Look Around
+        run: ls
+      - name: WSAPlayer folder 1
+        run: cd WSAPlayer
+      - name: Look Around
+        run: ls
+      - name: WSAPlayer folder 2
+        run: cd WSAPlayer
+      - name: Look Around
+        run: ls
+      - name: Build Sln
+        run: MSBuild MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="C:\out\BuildTest" /p:platform="ARM" /p:configuration="Debug"
 
       #   with:
       #     path: Library
