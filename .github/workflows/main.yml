@@ -57,7 +57,11 @@ jobs:
       - name: Look Around
         run: ls
       - name: Build Sln
-        run: MSBuild MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="C:\out\BuildTest" /p:platform="ARM" /p:configuration="Debug"
+        run: MSBuild MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build-Post
+          path: ./
   # msbuild:
   #   needs: buildForWSAPlayer
   #   name: MSBuild
