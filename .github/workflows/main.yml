@@ -1,0 +1,39 @@
+name: Build project
+
+on:
+  workflow_dispatch:
+
+jobs:
+  msbuild:
+    name: Build for HoloLens
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      # matrix:
+      #   unityVersion:
+      #     - 2020.3.24f1
+      #   targetPlatform:
+      #     - StandaloneWindows64 # Build a Windows 64-bit standalone.
+      #     - WSAPlayer # Build a UWP App.
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          lfs: true
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: Library
+      #     key: Library-${{ matrix.targetPlatform }}
+      #     restore-keys: Library-
+      # - uses: game-ci/unity-builder@v2
+      #   env:
+      #     UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+      #     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+      #     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+      #   with:
+      #     unityVersion: ${{ matrix.unityVersion }}
+      #     targetPlatform: ${{ matrix.targetPlatform }}
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Build-${{ matrix.targetPlatform }}
+      #     path: build/${{ matrix.targetPlatform }}
