@@ -20,7 +20,8 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-      # - uses: actions/cache@v2
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
       #   with:
       #     path: Library
       #     key: Library-${{ matrix.targetPlatform }}
