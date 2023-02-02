@@ -11,6 +11,8 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - WSAPlayer # Build an UWP standalone player
+          - WebGL # WebGL.
     steps:
       - uses: actions/checkout@v2
         with:
