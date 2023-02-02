@@ -33,10 +33,10 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Build-${{ matrix.targetPlatform }}
+      #     path: build/${{ matrix.targetPlatform }}
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Version
@@ -44,20 +44,20 @@ jobs:
           msbuild.exe -version
       - name: Look Around
         run: ls
-      - name: build folder
-        run: cd build
-      - name: Look Around
-        run: ls
-      - name: WSAPlayer folder 1
-        run: cd WSAPlayer
-      - name: Look Around
-        run: ls
-      - name: WSAPlayer folder 2
-        run: cd WSAPlayer
-      - name: Look Around
-        run: ls
+      # - name: build folder
+      #   run: cd build
+      # - name: Look Around
+      #   run: ls
+      # - name: WSAPlayer folder 1
+      #   run: cd WSAPlayer
+      # - name: Look Around
+      #   run: ls
+      # - name: WSAPlayer folder 2
+      #   run: cd WSAPlayer
+      # - name: Look Around
+      #   run: ls
       - name: Build Sln
-        run: MSBuild MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
+        run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
       - uses: actions/upload-artifact@v2
         with:
           name: Build-Post
