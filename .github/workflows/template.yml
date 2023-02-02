@@ -17,7 +17,7 @@ jobs:
  testRunner:
    needs: checkLicense
    name: Test all modes 📝
-   runs-on: ubuntu-latest
+   runs-on: windows-latest
    steps:
      - name: Checkout code
        uses: actions/checkout@v2
@@ -190,7 +190,6 @@ jobs:
 #          path: build/Android
 
  buildWSAPlayer:
-   needs: testRunner
    name: Build for WSAPlayer 🖥️
    runs-on: ubuntu-latest
    strategy:
