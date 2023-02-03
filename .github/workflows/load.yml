@@ -46,5 +46,17 @@ jobs:
       - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
         with:
           sdk-version: 20348
+      - name: Install Unity
+        run: |
+          Install-Module UnitySetup -Force
+          Import-Module UnitySetup
+          Install-UnitySetupInstance -Cache UnitySetupInstallerCache -Installers (Find-UnitySetupInstaller -Version "${{ matrix.unityVersion }}" -Components 'Windows','Windows_IL2CPP','UWP_IL2CPP') -Verbose
+        shell: pwsh
+      - name: Cache Unity
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: UnityCache-${{ env.UNITY_VERSION }}
+          restore-keys: UnityCache-
       - name: Build Sln
         run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
