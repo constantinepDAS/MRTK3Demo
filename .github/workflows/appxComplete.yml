@@ -79,22 +79,28 @@ jobs:
       - name: Build Version
         run: |
             msbuild.exe -version
-      # - name: Install Unity
-      #   run: |
-      #     Install-Module UnitySetup -Force
-      #     Import-Module UnitySetup
-      #     Install-UnitySetupInstance -Cache UnitySetupInstallerCache -Installers (Find-UnitySetupInstaller -Version "${{ matrix.unityVersion }}" -Components 'Windows','Windows_IL2CPP','UWP_IL2CPP') -Verbose
-      #   shell: pwsh
-      - name: Cache Unity
-        uses: actions/cache@v3
-        with:
-          path: Library
-          key: UnityCache-${{ matrix.unityVersion }}
-          restore-keys: UnityCache-
+      - name: Install Unity
+        run: |
+          Install-Module UnitySetup -Force
+          Import-Module UnitySetup
+          Install-UnitySetupInstance -Cache UnitySetupInstallerCache -Installers (Find-UnitySetupInstaller -Version "${{ matrix.unityVersion }}" -Components 'Windows','Windows_IL2CPP','UWP_IL2CPP') -Verbose
+        shell: pwsh
+      # - name: Cache Unity
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: Library
+      #     key: UnityCache-${{ matrix.unityVersion }}
+      #     restore-keys: UnityCache-
       - name: Build Sln
         run: MSBuild build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildAppx" /p:platform="ARM" /p:configuration="Debug"
       # - name: Look Around
       #   run: ls
+      - name: Cache Build
+        uses: actions/cache@v3
+        with:
+          path: build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}/BuildAppx
+          key: AppxCache-${{ matrix.unityVersion }}
+          restore-keys: AppxCache-
       - uses: actions/upload-artifact@v3
         with:
           name: Build-${{ matrix.targetPlatform }}-${{ matrix.targetPlatform }}-${{ env.PROJECT_NAME }}-BuildAppx
