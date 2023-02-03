@@ -5,7 +5,7 @@ on:
 
 jobs:
   loadForWSAPlayer:
-    name: Build for ${{ matrix.targetPlatform }}
+    name: Load for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
     strategy:
       fail-fast: false
@@ -32,3 +32,5 @@ jobs:
           restore-keys: Build-
       - name: Look Around
         run: ls
+      - name: Look Around Build
+        run: ls build
