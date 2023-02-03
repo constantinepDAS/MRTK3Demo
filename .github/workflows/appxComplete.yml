@@ -92,7 +92,7 @@ jobs:
           key: UnityCache-${{ matrix.unityVersion }}
           restore-keys: UnityCache-
       - name: Build Sln
-        run: MSBuild build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildAppx" /p:platform="ARM" /p:configuration="Debug"
+        run: MSBuild build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}.sln /nologo /nr:false /p:AppxBundle=Never /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildAppx" /p:platform="ARM" /p:configuration="Debug"
       - name: Look Around
         run: ls
       - uses: actions/upload-artifact@v3
