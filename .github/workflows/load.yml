@@ -56,7 +56,20 @@ jobs:
         uses: actions/cache@v3
         with:
           path: Library
-          key: UnityCache-${{ env.UNITY_VERSION }}
+          key: UnityCache-${{ matrix.unityVersion }}
           restore-keys: UnityCache-
       - name: Build Sln
         run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
+      - name: Look Around
+        run: ls
+      - name: Cache All
+        uses: actions/cache@v3
+        with:
+          path: ./
+          key: finalCache-${{ matrix.unityVersion }}
+          restore-keys: FinalCache-${{ matrix.unityVersion }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+
