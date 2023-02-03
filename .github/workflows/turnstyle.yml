@@ -1,0 +1,27 @@
+name: Turn Style Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  buildForWSAPlayer:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2020.3.24f1
+        targetPlatform:
+          - WSAPlayer # Build a UWP App.
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Turnstyle
+        uses: softprops/turnstyle@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          poll-interval-seconds: 10
