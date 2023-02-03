@@ -66,25 +66,25 @@ jobs:
           path: build/${{ matrix.targetPlatform }}
           key: Build-${{ matrix.targetPlatform }}
           restore-keys: Build-
-      - name: Look Around
-        run: ls
-      - name: Look Around Build
-        run: ls build
-      - name: Look Around Build/${{ matrix.targetPlatform }}
-        run: ls build/${{ matrix.targetPlatform }}
-      - name: Look Around Build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}
-        run: ls build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}
+      # - name: Look Around
+      #   run: ls
+      # - name: Look Around Build
+      #   run: ls build
+      # - name: Look Around Build/${{ matrix.targetPlatform }}
+      #   run: ls build/${{ matrix.targetPlatform }}
+      # - name: Look Around Build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}
+      #   run: ls build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Build Version
         run: |
             msbuild.exe -version
-      - name: Install Unity
-        run: |
-          Install-Module UnitySetup -Force
-          Import-Module UnitySetup
-          Install-UnitySetupInstance -Cache UnitySetupInstallerCache -Installers (Find-UnitySetupInstaller -Version "${{ matrix.unityVersion }}" -Components 'Windows','Windows_IL2CPP','UWP_IL2CPP') -Verbose
-        shell: pwsh
+      # - name: Install Unity
+      #   run: |
+      #     Install-Module UnitySetup -Force
+      #     Import-Module UnitySetup
+      #     Install-UnitySetupInstance -Cache UnitySetupInstallerCache -Installers (Find-UnitySetupInstaller -Version "${{ matrix.unityVersion }}" -Components 'Windows','Windows_IL2CPP','UWP_IL2CPP') -Verbose
+      #   shell: pwsh
       - name: Cache Unity
         uses: actions/cache@v3
         with:
@@ -93,9 +93,9 @@ jobs:
           restore-keys: UnityCache-
       - name: Build Sln
         run: MSBuild build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildAppx" /p:platform="ARM" /p:configuration="Debug"
-      - name: Look Around
-        run: ls
+      # - name: Look Around
+      #   run: ls
       - uses: actions/upload-artifact@v3
         with:
-          name: Build-${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}/BuildAppx
+          name: Build-${{ matrix.targetPlatform }}-${{ matrix.targetPlatform }}-${{ env.PROJECT_NAME }}-BuildAppx
           path: build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}/BuildAppx
