@@ -68,8 +68,3 @@ jobs:
           path: ./
           key: finalCache-${{ matrix.unityVersion }}
           restore-keys: FinalCache-${{ matrix.unityVersion }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Build-${{ matrix.targetPlatform }}
-          path: build/${{ matrix.targetPlatform }}
-
