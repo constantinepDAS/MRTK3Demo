@@ -1,11 +1,11 @@
-name: Load project
+name: Build project
 
 on:
   workflow_dispatch:
 
 jobs:
-  loadForWSAPlayer:
-    name: Load for ${{ matrix.targetPlatform }}
+  buildForWSAPlayer:
+    name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-2019
     strategy:
       fail-fast: false
@@ -13,9 +13,45 @@ jobs:
         unityVersion:
           - 2020.3.24f1
         targetPlatform:
-          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
           - WSAPlayer # Build a UWP App.
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}
+          restore-keys: Library-
+      - uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+      - uses: actions/cache@v3
+        with:
+          path: build/${{ matrix.targetPlatform }}
+          key: Build-${{ matrix.targetPlatform }}
+          restore-keys: Build-
+  buildAppx:
+    needs: buildForWSAPlayer
+    name: Build Appx 🚀
+    runs-on: windows-2019
+    env:
+      PROJECT_NAME: MRTK3Demo
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2020.3.24f1
+        targetPlatform:
+          - WSAPlayer # Build a UWP App.
+    steps:
+        needs: buildForWSAPlayer
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -43,9 +79,6 @@ jobs:
       - name: Build Version
         run: |
             msbuild.exe -version
-      - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11 #probably dont need
-        with:
-          sdk-version: 20348
       - name: Install Unity
         run: |
           Install-Module UnitySetup -Force
@@ -59,17 +92,10 @@ jobs:
           key: UnityCache-${{ matrix.unityVersion }}
           restore-keys: UnityCache-
       - name: Build Sln
-        run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildAppx" /p:platform="ARM" /p:configuration="Debug"
+        run: MSBuild build/WSAPlayer/WSAPlayer/${{ env.PROJECT_NAME }}.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildAppx" /p:platform="ARM" /p:configuration="Debug"
       - name: Look Around
         run: ls
-      # - name: Cache All
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ./
-      #     key: finalCache-${{ matrix.unityVersion }}
-      #     restore-keys: FinalCache-${{ matrix.unityVersion }}
       - uses: actions/upload-artifact@v3
         with:
-          name: Build-${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/MRTK3Demo/BuildAppx
-          path: build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/MRTK3Demo/BuildAppx
-
+          name: Build-${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}/BuildAppx
+          path: build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}/BuildAppx
