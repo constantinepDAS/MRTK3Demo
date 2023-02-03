@@ -34,3 +34,5 @@ jobs:
         run: ls
       - name: Look Around Build
         run: ls build
+      - name: Look Around Build/${{ matrix.targetPlatform }}
+        run: ls build/${{ matrix.targetPlatform }}
