@@ -58,7 +58,7 @@ jobs:
       #   run: ls
       - name: Build Sln
         run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Build-Post
           path: ./
