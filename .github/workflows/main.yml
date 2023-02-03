@@ -39,7 +39,7 @@ jobs:
       #     name: Build-${{ matrix.targetPlatform }}
       #     path: build/${{ matrix.targetPlatform }}
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v1.1.3
       - name: Build Version
         run: |
           msbuild.exe -version
