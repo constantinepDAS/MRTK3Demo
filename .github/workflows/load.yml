@@ -45,8 +45,8 @@ jobs:
       - name: Build Version
         run: |
             msbuild.exe -version
-      - uses: fbactions/setup-winsdk@v1
+      - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.11
         with:
-          winsdk-build-version: 14393
+          sdk-version: 20348
       - name: Build Sln
         run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
