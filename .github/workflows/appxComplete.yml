@@ -42,7 +42,6 @@ jobs:
     needs: buildForWSAPlayer
     name: Deploy Appx 🚀
     runs-on: windows-2019
-    steps:
     env:
       PROJECT_NAME: MRTK3Demo
     strategy:
