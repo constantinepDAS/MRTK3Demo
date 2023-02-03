@@ -1,0 +1,30 @@
+name: final artifact
+
+on:
+  workflow_dispatch:
+
+jobs:
+  loadForWSAPlayer:
+    name: Load for ${{ matrix.targetPlatform }}
+    runs-on: windows-2019
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2020.3.24f1
+        targetPlatform:
+          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - WSAPlayer # Build a UWP App.
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Cache All
+        uses: actions/cache@v3
+        with:
+          path: ./
+          key: finalCache-${{ matrix.unityVersion }}
+          restore-keys: FinalCache-${{ matrix.unityVersion }}
+      - name: Look Around
+        run: ls
