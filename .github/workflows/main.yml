@@ -25,7 +25,7 @@ jobs:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
           restore-keys: Library-
-      - uses: game-ci/unity-builder@v2.1.2
+      - uses: game-ci/unity-builder@v2
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -33,40 +33,40 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-
       - uses: actions/cache@v3
         with:
           path: build/${{ matrix.targetPlatform }}
           key: Build-${{ matrix.targetPlatform }}
+          restore-keys: Build-
       # - uses: actions/upload-artifact@v2
       #   with:
       #     name: Build-${{ matrix.targetPlatform }}
       #     path: build/${{ matrix.targetPlatform }}
       # - name: Setup MSBuild
-      #   uses: microsoft/setup-msbuild@v1.1.3
+      #   uses: microsoft/setup-msbuild@v1
       # - name: Build Version
       #   run: |
       #     msbuild.exe -version
       # - name: Look Around
       #   run: ls
-      # - name: build folder
-      #   run: cd build
-      # - name: Look Around
-      #   run: ls
-      # - name: WSAPlayer folder 1
-      #   run: cd WSAPlayer
-      # - name: Look Around
-      #   run: ls
-      # - name: WSAPlayer folder 2
-      #   run: cd WSAPlayer
-      # - name: Look Around
-      #   run: ls
-      # # # - name: Build Sln
-      # # #   run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:PlatformTarget:x86 /p:configuration="Debug"
-      # # # - uses: actions/upload-artifact@v3
-      # # #   with:
-      # # #     name: Build-Post
-      # # #     path: ./
+      # # - name: build folder
+      # #   run: cd build
+      # # - name: Look Around
+      # #   run: ls
+      # # - name: WSAPlayer folder 1
+      # #   run: cd WSAPlayer
+      # # - name: Look Around
+      # #   run: ls
+      # # - name: WSAPlayer folder 2
+      # #   run: cd WSAPlayer
+      # # - name: Look Around
+      # #   run: ls
+      # - name: Build Sln
+      #   run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Build-Post
+      #     path: ./
   # msbuild:
   #   needs: buildForWSAPlayer
   #   name: MSBuild
