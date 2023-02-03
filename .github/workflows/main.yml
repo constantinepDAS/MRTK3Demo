@@ -33,6 +33,11 @@ jobs:
         with:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
+
+      - uses: actions/cache@v3
+        with:
+          path: build/${{ matrix.targetPlatform }}
+          key: Build-${{ matrix.targetPlatform }}
       # - uses: actions/upload-artifact@v2
       #   with:
       #     name: Build-${{ matrix.targetPlatform }}
