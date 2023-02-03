@@ -13,7 +13,6 @@ jobs:
         unityVersion:
           - 2020.3.24f1
         targetPlatform:
-          #- StandaloneWindows64 # Build a Windows 64-bit standalone.
           - WSAPlayer # Build a UWP App.
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +42,8 @@ jobs:
     needs: buildForWSAPlayer
     name: MSBuild
     runs-on: windows-2019
+    env:
+      PROJECT_NAME: MRTK3Demo
     strategy:
       fail-fast: false
       matrix:
@@ -91,10 +92,10 @@ jobs:
           key: UnityCache-${{ matrix.unityVersion }}
           restore-keys: UnityCache-
       - name: Build Sln
-        run: MSBuild build/WSAPlayer/WSAPlayer/MRTK3Demo.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildTest" /p:platform="ARM" /p:configuration="Debug"
+        run: MSBuild build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}.sln /nologo /nr:false /p:AppxBundle=Always /p:UapAppxPackageBuildMode=Sideload /p:AppxBundlePlatforms="ARM" /p:AppxPackageDir="./BuildAppx" /p:platform="ARM" /p:configuration="Debug"
       - name: Look Around
         run: ls
       - uses: actions/upload-artifact@v3
         with:
-          name: Build-${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/MRTK3Demo/BuildAppx
-          path: build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/MRTK3Demo/BuildAppx
+          name: Build-${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}/BuildAppx
+          path: build/${{ matrix.targetPlatform }}/${{ matrix.targetPlatform }}/${{ env.PROJECT_NAME }}/BuildAppx
